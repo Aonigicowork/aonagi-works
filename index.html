@@ -387,30 +387,100 @@
       padding: .55rem .8rem; font-size: .88rem; color: var(--ink); text-align: left;
     }
     .start-list button:hover, .start-list a:hover { background: #316AC5; color: #fff; }
-    /* Responsive */
-    @media (max-width: 900px) {
-      .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .float-wins, .desk-icons { display: none; }
-      .cloud { display: none; }
-    }
+    /* ─── Responsive Full Ladder ────────────────────────────────────────── */
+
+    /* Phone portrait (≤640px) — default is mobile-first */
     @media (max-width: 640px) {
-      .grid-3, .grid-2, .grid-4, .why-list { grid-template-columns: 1fr; }
-      .task-pills { display: none; }
-      .desktop { padding: .75rem .65rem 4.75rem; }
-      .win-body { padding: .9rem .8rem 1rem; }
-      .btns { flex-direction: column; }
-      .btn { width: 100%; }
+      .desktop { padding: 0 0 3rem 0; }
+      .win { margin: 0 0 .5rem 0; border-radius: 0; border-left: 0; border-right: 0; }
+      .win.hero { margin-top: 0; }
+      .win-body { padding: .75rem .7rem 1rem; }
+      h1.pixel { font-size: .9rem; }
+      h2.pixel { font-size: .65rem; margin-bottom: .65rem; }
+      .lead { font-size: .85rem; }
+      .desc { font-size: .82rem; }
+      .grid-3, .grid-4, .grid-2, .why-list { grid-template-columns: 1fr; gap: .55rem; }
+      .task-pills, .float-wins, .desk-icons, .cloud { display: none !important; }
+      .start-btn span { display: none; }
+      .start-btn { font-size: 0; padding: .35rem .55rem; }
+      .start-btn::before { content: "🪟"; font-size: 1rem; }
       .flow .arrow { display: none; }
-      .flow { flex-direction: column; }
-    }
-    @media (max-width: 380px) {
-      h1.pixel { font-size: .85rem; }
+      .flow { flex-direction: column; gap: .3rem; }
+      .flow .step { width: 100%; text-align: center; }
+      .btns { flex-direction: column; }
+      .btn { width: 100%; text-align: center; }
+      .price-box { margin: 0 -.1rem; }
+      .why-item { font-size: .82rem; padding: .55rem .7rem; }
+      .card { border-width: 1px; }
+      .card h3 { font-size: .85rem; }
+      .contact-row { flex-direction: column; }
+      .contact-row .btn { width: 100%; }
+      .stack span { font-size: .72rem; padding: .25rem .5rem; }
       .tray #clock { display: none; }
     }
-    @media (max-height: 500px) and (orientation: landscape) {
-      .cloud, .float-wins, .desk-icons { display: none; }
-      .desktop { padding-bottom: 3.5rem; }
+
+    /* Tiny phone (≤380px) — extra compact */
+    @media (max-width: 380px) {
+      h1.pixel { font-size: .75rem; }
+      h2.pixel { font-size: .55rem; }
+      .lead { font-size: .78rem; }
+      .win-title { font-size: .68rem; }
+      .win-ctrls { display: none; }
+      .badge { font-size: .6rem; }
+      .card ul { margin-left: .5rem; }
     }
+
+    /* Tablet portrait (641–900px) — 2-column grids */
+    @media (min-width: 641px) and (max-width: 900px) {
+      .desktop { padding: .5rem .35rem 3.5rem; }
+      .win { max-width: calc(100% - .4rem); }
+      .win-body { padding: .85rem .75rem 1rem; }
+      .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .float-wins, .desk-icons { display: none; }
+      .cloud { opacity: .3; }
+      .why-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    /* Tablet landscape / small laptop (901–1100px) — 3-col grid, balanced */
+    @media (min-width: 901px) and (max-width: 1100px) {
+      .win-body { padding: 1rem .85rem 1.15rem; }
+      .grid-4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    /* Laptop (1101–1440px) — standard */
+    /* No overrides needed — uses :root --max: 1120px */
+
+    /* Desktop (1441–1920px) — more breathing room */
+    @media (min-width: 1441px) and (max-width: 1920px) {
+      .desktop { padding: 1.5rem 2rem 5.5rem; }
+      .win { max-width: 1280px; }
+      .win-body { padding: 1.15rem 1.35rem 1.35rem; }
+      h1.pixel { font-size: clamp(1.25rem, 2.8vw, 1.8rem); }
+      .grid-3 { gap: 1.1rem; }
+      .card { padding: 1.1rem; }
+    }
+
+    /* Ultrawide / 4K (≥1921px) */
+    @media (min-width: 1921px) {
+      .desktop { padding: 2rem 3rem 5.5rem; }
+      .win { max-width: 1400px; }
+      .win-body { padding: 1.25rem 1.6rem 1.5rem; }
+      h1.pixel { font-size: clamp(1.35rem, 2.2vw, 2rem); }
+      .grid-3 { gap: 1.25rem; }
+      .card { padding: 1.25rem; }
+      .card h3 { font-size: 1.05rem; }
+    }
+
+    /* Landscape phone (max-height ≤500px) — compact */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .desktop { padding-bottom: 3rem; }
+      .cloud, .float-wins, .desk-icons { display: none !important; }
+      .win.hero .win-body { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+      .win.hero .win-body > p, .win.hero .win-body .btns { max-width: 48%; }
+      .win.hero .win-body .btns { flex-direction: row; }
+    }
+
+    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -419,10 +489,14 @@
       .fade-in { opacity: 1; transform: none; }
       .cloud { display: none; }
     }
+
+    /* Print */
     @media print {
       .taskbar, #boot, .desk-icons, .float-wins, .cloud, #startMenu { display: none !important; }
-      .desktop { background: #fff; padding: 0; }
-      .win { box-shadow: none; break-inside: avoid; }
+      .desktop { background: #fff !important; padding: 0; }
+      .win { box-shadow: none; break-inside: avoid; border: 1px solid #ccc; }
+      .win-body { padding: .5rem; }
+      .section-gap { margin-top: .5rem; }
     }
   </style>
 </head>
