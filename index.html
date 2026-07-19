@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#3A6EA5" />
+  <meta name="description" content="Aonagi Works — websites, Telegram bots, AI automation, and custom digital solutions." />
+  <meta property="og:title" content="Aonagi Works" />
+  <meta property="og:description" content="Building modern websites, Telegram bots, AI automation, and custom digital solutions." />
+  <meta property="og:type" content="website" />
+  <title>Aonagi Works — Digital Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --xp-blue: #3A6EA5;
+      --xp-blue-dark: #245B93;
+      --xp-blue-light: #5B9BD5;
+      --xp-title: linear-gradient(180deg, #0A246A 0%, #3A6EA5 45%, #1665C0 100%);
+      --xp-green: #3C8D40;
+      --sky: #7EC8E3;
+      --sky-deep: #5BA3C9;
+      --grass: #5A9E4B;
+      --grass-dark: #3F7A34;
+      --window: #ECE9D8;
+      --window-face: #F5F4EC;
+      --ink: #1A1A1A;
+      --muted: #555;
+      --white: #FFFFFF;
+      --border: #0054E3;
+      --shadow: 2px 2px 0 rgba(0,0,0,.35);
+      --radius: 8px;
+      --font: "Inter", system-ui, sans-serif;
+      --pixel: "Press Start 2P", monospace;
+      --taskbar: linear-gradient(180deg, #3A6EA5, #245B93);
+      --max: 1120px;
+    }
+    [data-theme="dark"] {
+      --sky: #1B2A4A;
+      --sky-deep: #0F1A30;
+      --grass: #1F3D28;
+      --grass-dark: #152A1C;
+      --window: #2A2D35;
+      --window-face: #23262E;
+      --ink: #F2F4F8;
+      --muted: #A8B0C0;
+      --white: #1C1F26;
+      --border: #5B9BD5;
+      --shadow: 2px 2px 0 rgba(0,0,0,.55);
+      --taskbar: linear-gradient(180deg, #1E3A5F, #12253D);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      color: var(--ink);
+      background: var(--sky);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.55;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath fill='%23000' stroke='%23fff' stroke-width='1' d='M1 1 L1 14 L5 11 L8 16 L10 15 L7 10 L12 10 Z'/%3E%3C/svg%3E") 1 1, auto;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: 0; background: none; }
+    img { max-width: 100%; display: block; }
+    .desktop {
+      min-height: 100vh;
+      padding: 1rem 1rem 5.5rem;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,.25), transparent 60%),
+        linear-gradient(180deg, var(--sky) 0%, var(--sky-deep) 55%, var(--grass) 55%, var(--grass-dark) 100%);
+      position: relative;
+    }
+    [data-theme="dark"] .desktop {
+      background:
+        radial-gradient(ellipse 70% 40% at 70% 10%, rgba(91,155,213,.15), transparent 50%),
+        linear-gradient(180deg, var(--sky) 0%, var(--sky-deep) 58%, var(--grass) 58%, var(--grass-dark) 100%);
+    }
+    /* Clouds */
+    .cloud {
+      position: absolute; background: rgba(255,255,255,.85); border-radius: 50px;
+      filter: drop-shadow(2px 2px 0 rgba(0,0,0,.08)); pointer-events: none; z-index: 0;
+      animation: drift linear infinite;
+    }
+    [data-theme="dark"] .cloud { background: rgba(120,140,180,.25); }
+    .cloud::before, .cloud::after {
+      content: ""; position: absolute; background: inherit; border-radius: 50%;
+    }
+    .cloud::before { width: 50%; height: 100%; top: -40%; left: 10%; }
+    .cloud::after { width: 60%; height: 110%; top: -50%; right: 8%; }
+    .c1 { width: 120px; height: 40px; top: 8%; left: -10%; animation-duration: 48s; }
+    .c2 { width: 90px; height: 30px; top: 18%; left: 30%; animation-duration: 62s; animation-delay: -12s; }
+    .c3 { width: 140px; height: 42px; top: 12%; left: 70%; animation-duration: 55s; animation-delay: -25s; }
+    @keyframes drift {
+      from { transform: translateX(0); }
+      to { transform: translateX(120vw); }
+    }
+    /* Boot screen */
+    #boot {
+      position: fixed; inset: 0; z-index: 9999; background: #000;
+      display: grid; place-items: center; color: #fff; font-family: var(--pixel);
+      font-size: 10px; text-align: center; gap: 1.25rem;
+    }
+    #boot.hide { animation: fadeOut .5s ease forwards; pointer-events: none; }
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+    .boot-bar {
+      width: min(240px, 70vw); height: 18px; border: 2px solid #fff; padding: 2px;
+    }
+    .boot-fill {
+      height: 100%; width: 0; background: linear-gradient(90deg, #245B93, #5B9BD5);
+      animation: load 1.8s ease forwards;
+    }
+    @keyframes load { to { width: 100%; } }
+    /* Taskbar */
+    .taskbar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 100;
+      height: 42px; display: flex; align-items: center; gap: .4rem;
+      padding: 0 .4rem; background: var(--taskbar);
+      box-shadow: 0 -2px 0 rgba(255,255,255,.15) inset;
+      border-top: 1px solid rgba(255,255,255,.25);
+    }
+    .start-btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: linear-gradient(180deg, #5CB85C, #3C8D40);
+      color: #fff; font-weight: 700; font-size: .85rem;
+      padding: .35rem .75rem .35rem .5rem; border-radius: 0 12px 12px 0;
+      border: 1px solid #2F6B32; box-shadow: 1px 1px 0 rgba(255,255,255,.25) inset;
+    }
+    .start-btn:hover { filter: brightness(1.08); }
+    .start-btn:active { transform: translateY(1px); }
+    .task-pills { display: flex; gap: .3rem; flex: 1; overflow-x: auto; }
+    .task-pill {
+      color: #fff; font-size: .72rem; white-space: nowrap;
+      padding: .3rem .65rem; border-radius: 3px;
+      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.12));
+      border: 1px solid rgba(255,255,255,.2); opacity: .9;
+    }
+    .task-pill:hover, .task-pill.active { opacity: 1; background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(0,0,0,.08)); }
+    .tray {
+      display: flex; align-items: center; gap: .5rem; color: #fff; font-size: .75rem;
+      padding: 0 .5rem; border-left: 1px solid rgba(0,0,0,.2);
+    }
+    .theme-toggle {
+      width: 28px; height: 22px; border-radius: 3px; color: #fff;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+      font-size: .8rem;
+    }
+    /* Desktop icons */
+    .desk-icons {
+      position: absolute; top: 1rem; left: 1rem; z-index: 2;
+      display: flex; flex-direction: column; gap: .85rem;
+    }
+    .desk-icon {
+      width: 72px; text-align: center; color: #fff; font-size: .68rem;
+      text-shadow: 1px 1px 0 #000; cursor: pointer; user-select: none;
+    }
+    .desk-icon .ico {
+      width: 40px; height: 40px; margin: 0 auto .25rem;
+      display: grid; place-items: center; font-size: 1.4rem;
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.35);
+      border-radius: 4px; box-shadow: var(--shadow);
+    }
+    .desk-icon:hover .ico { background: rgba(58,110,165,.55); }
+    /* Window chrome */
+    .win {
+      position: relative; z-index: 5;
+      background: var(--window);
+      border: 2px solid var(--border);
+      border-radius: var(--radius) var(--radius) 4px 4px;
+      box-shadow: var(--shadow), 0 12px 40px rgba(0,0,0,.18);
+      margin: 0 auto 1.25rem;
+      max-width: var(--max);
+      overflow: hidden;
+      animation: winIn .45s cubic-bezier(.2,.8,.2,1) both;
+    }
+    @keyframes winIn {
+      from { opacity: 0; transform: translateY(18px) scale(.97); }
+      to { opacity: 1; transform: none; }
+    }
+    .win-title {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .35rem .45rem .35rem .6rem;
+      background: var(--xp-title); color: #fff;
+      font-size: .78rem; font-weight: 600;
+      user-select: none; cursor: grab;
+    }
+    .win-title:active { cursor: grabbing; }
+    .win-title .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.35); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+    }
+    .win-title span { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .win-ctrls { display: flex; gap: 3px; }
+    .win-ctrls b {
+      width: 18px; height: 16px; display: grid; place-items: center;
+      font-size: 9px; font-weight: 700; color: #000;
+      background: linear-gradient(180deg, #fff, #d4d0c8);
+      border: 1px solid #003c74; border-radius: 2px; line-height: 1;
+    }
+    .win-ctrls b.x { background: linear-gradient(180deg, #ff9a8b, #e0432f); color: #fff; }
+    .win-body {
+      background: var(--window-face);
+      padding: 1.1rem 1.15rem 1.25rem;
+      border-top: 1px solid rgba(255,255,255,.5);
+    }
+    .win.hero { margin-top: .5rem; }
+    .pixel {
+      font-family: var(--pixel); letter-spacing: .02em; line-height: 1.5;
+    }
+    h1.pixel {
+      font-size: clamp(1.05rem, 3.2vw, 1.75rem);
+      color: var(--xp-blue-dark);
+      text-shadow: 2px 2px 0 rgba(0,0,0,.08);
+      margin-bottom: .75rem;
+    }
+    [data-theme="dark"] h1.pixel { color: #9ec5ea; text-shadow: none; }
+    h2.pixel { font-size: clamp(.7rem, 1.8vw, .9rem); margin-bottom: .85rem; color: var(--xp-blue-dark); }
+    [data-theme="dark"] h2.pixel { color: #9ec5ea; }
+    .lead { font-size: clamp(.95rem, 2vw, 1.1rem); color: var(--muted); max-width: 46rem; margin-bottom: .85rem; }
+    .desc { color: var(--muted); max-width: 48rem; margin-bottom: 1.1rem; }
+    .btns { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .4rem; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+      padding: .55rem 1rem; font-weight: 600; font-size: .9rem;
+      border: 2px solid #003c74; border-radius: 4px;
+      background: linear-gradient(180deg, #fff 0%, #ece9d8 48%, #d6d2c2 100%);
+      color: #000; box-shadow: 1px 1px 0 #fff inset, -1px -1px 0 rgba(0,0,0,.15) inset;
+      transition: transform .15s ease, filter .15s ease;
+    }
+    .btn:hover { filter: brightness(1.04); transform: translateY(-1px); }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary {
+      background: linear-gradient(180deg, #5B9BD5, #245B93);
+      color: #fff; border-color: #0A246A;
+      box-shadow: 1px 1px 0 rgba(255,255,255,.25) inset;
+    }
+    .btn-green {
+      background: linear-gradient(180deg, #6ecf6e, #3C8D40);
+      color: #fff; border-color: #2F6B32;
+    }
+    /* Floating mini windows */
+    .float-wins {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden;
+    }
+    .float-win {
+      position: absolute; width: min(180px, 28vw);
+      background: var(--window-face); border: 2px solid var(--border);
+      border-radius: 6px; box-shadow: var(--shadow); opacity: .9;
+      animation: floatY 7s ease-in-out infinite;
+    }
+    .float-win .mini-title {
+      background: var(--xp-title); color: #fff; font-size: .55rem;
+      padding: .2rem .35rem; font-weight: 600;
+    }
+    .float-win .mini-body { padding: .4rem; font-size: .65rem; color: var(--muted); }
+    .fw1 { top: 12%; right: 4%; animation-delay: 0s; }
+    .fw2 { top: 38%; right: 8%; animation-delay: -2s; width: min(150px, 24vw); }
+    .fw3 { bottom: 22%; left: 6%; animation-delay: -4s; }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    /* Cards / grids */
+    .grid-3 {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .85rem;
+    }
+    .grid-2 {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .85rem;
+    }
+    .grid-4 {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: .75rem;
+    }
+    .card {
+      min-width: 0; max-width: 100%;
+      background: var(--white);
+      border: 2px solid #7A96DF;
+      border-radius: 6px;
+      padding: .9rem;
+      box-shadow: 2px 2px 0 rgba(0,0,0,.08);
+      transition: transform .2s ease, box-shadow .2s ease;
+      overflow-wrap: anywhere; word-break: break-word;
+    }
+    [data-theme="dark"] .card { border-color: #3d5a80; background: #1a1e28; }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 3px 6px 0 rgba(0,0,0,.12);
+    }
+    .card h3 {
+      font-size: .98rem; margin: .35rem 0 .4rem; color: var(--ink);
+    }
+    .card p, .card li { font-size: .86rem; color: var(--muted); }
+    .card ul { margin-left: 1rem; }
+    .card li { margin: .15rem 0; }
+    .icon-lg { font-size: 1.5rem; line-height: 1; }
+    .badge {
+      display: inline-block; font-size: .68rem; font-weight: 700;
+      padding: .15rem .45rem; border-radius: 3px;
+      background: #E8F4FF; color: #0A246A; border: 1px solid #7A96DF;
+    }
+    [data-theme="dark"] .badge { background: #1e3a5f; color: #cde4ff; border-color: #3d5a80; }
+    .badge.ok { background: #E6F7E8; color: #1F6B2C; border-color: #7BC47F; }
+    [data-theme="dark"] .badge.ok { background: #1a3a22; color: #9fe0a8; }
+    /* Why list */
+    .why-list {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem;
+    }
+    .why-item {
+      display: flex; align-items: flex-start; gap: .5rem;
+      background: var(--white); border: 2px solid #B8C8E8; border-radius: 6px;
+      padding: .7rem .8rem; font-size: .9rem; font-weight: 600;
+    }
+    [data-theme="dark"] .why-item { border-color: #3d5a80; background: #1a1e28; }
+    .why-item span { color: var(--xp-green); font-weight: 800; }
+    /* Pricing */
+    .price-box {
+      text-align: center; max-width: 420px; margin: 0 auto;
+      background: var(--white); border: 3px solid var(--border); border-radius: 8px;
+      padding: 1.4rem 1.2rem; box-shadow: 4px 4px 0 rgba(10,36,106,.15);
+    }
+    [data-theme="dark"] .price-box { background: #1a1e28; }
+    .price-box .from { font-size: .75rem; font-weight: 700; letter-spacing: .08em; color: var(--muted); }
+    .price-box .amount {
+      font-family: var(--pixel); font-size: clamp(1rem, 3vw, 1.35rem);
+      margin: .7rem 0; color: var(--xp-blue-dark);
+    }
+    [data-theme="dark"] .price-box .amount { color: #9ec5ea; }
+    .price-box ul { text-align: left; margin: .8rem auto 1rem; max-width: 280px; color: var(--muted); font-size: .9rem; }
+    .note { font-size: .82rem; color: var(--muted); margin-top: .85rem; }
+    /* Stack pills */
+    .stack {
+      display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center;
+    }
+    .stack span {
+      font-size: .78rem; font-weight: 600; padding: .4rem .65rem;
+      border: 2px solid #7A96DF; border-radius: 999px;
+      background: linear-gradient(180deg, #fff, #e8f0ff);
+      color: #0A246A;
+      transition: transform .15s ease;
+    }
+    [data-theme="dark"] .stack span {
+      background: linear-gradient(180deg, #243044, #1a1e28); color: #cde4ff; border-color: #3d5a80;
+    }
+    .stack span:hover { transform: translateY(-2px) scale(1.04); }
+    /* Workflow */
+    .flow {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .4rem;
+    }
+    .flow .step {
+      background: var(--white); border: 2px solid #7A96DF; border-radius: 6px;
+      padding: .45rem .7rem; font-size: .8rem; font-weight: 700;
+    }
+    [data-theme="dark"] .flow .step { background: #1a1e28; border-color: #3d5a80; }
+    .flow .arrow { color: var(--xp-blue); font-weight: 800; }
+    /* Testimonials */
+    .quote {
+      font-size: .92rem; color: var(--muted); margin: .4rem 0 .5rem;
+    }
+    .stars { color: #E6A817; letter-spacing: 1px; font-size: .9rem; }
+    /* Contact */
+    .contact-row { display: flex; flex-wrap: wrap; gap: .55rem; justify-content: center; }
+    /* Footer */
+    .footer-win .win-body { text-align: center; font-size: .85rem; color: var(--muted); }
+    .footer-win strong { color: var(--ink); }
+    /* Section spacing */
+    .section-gap { margin-top: 1.1rem; }
+    .fade-in { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+    /* Start menu */
+    #startMenu {
+      display: none; position: fixed; left: 4px; bottom: 46px; z-index: 120;
+      width: min(260px, calc(100vw - 16px));
+      background: var(--window-face); border: 2px solid var(--border);
+      border-radius: 0 8px 0 0; box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    #startMenu.open { display: block; animation: winIn .25s ease; }
+    .start-head {
+      background: var(--xp-title); color: #fff; padding: .65rem .8rem;
+      font-weight: 700; font-size: .9rem;
+    }
+    .start-list button, .start-list a {
+      display: flex; width: 100%; align-items: center; gap: .55rem;
+      padding: .55rem .8rem; font-size: .88rem; color: var(--ink); text-align: left;
+    }
+    .start-list button:hover, .start-list a:hover { background: #316AC5; color: #fff; }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .float-wins, .desk-icons { display: none; }
+      .cloud { display: none; }
+    }
+    @media (max-width: 640px) {
+      .grid-3, .grid-2, .grid-4, .why-list { grid-template-columns: 1fr; }
+      .task-pills { display: none; }
+      .desktop { padding: .75rem .65rem 4.75rem; }
+      .win-body { padding: .9rem .8rem 1rem; }
+      .btns { flex-direction: column; }
+      .btn { width: 100%; }
+      .flow .arrow { display: none; }
+      .flow { flex-direction: column; }
+    }
+    @media (max-width: 380px) {
+      h1.pixel { font-size: .85rem; }
+      .tray #clock { display: none; }
+    }
+    @media (max-height: 500px) and (orientation: landscape) {
+      .cloud, .float-wins, .desk-icons { display: none; }
+      .desktop { padding-bottom: 3.5rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .fade-in { opacity: 1; transform: none; }
+      .cloud { display: none; }
+    }
+    @media print {
+      .taskbar, #boot, .desk-icons, .float-wins, .cloud, #startMenu { display: none !important; }
+      .desktop { background: #fff; padding: 0; }
+      .win { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div id="boot" aria-hidden="true">
+    <div>
+      <div class="pixel" style="font-size:12px;margin-bottom:12px">AONAGI WORKS</div>
+      <div style="opacity:.7;margin-bottom:14px">Starting digital studio…</div>
+      <div class="boot-bar"><div class="boot-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="desktop">
+    <div class="cloud c1" aria-hidden="true"></div>
+    <div class="cloud c2" aria-hidden="true"></div>
+    <div class="cloud c3" aria-hidden="true"></div>
+
+    <div class="desk-icons" aria-hidden="true">
+      <div class="desk-icon" data-scroll="#about"><div class="ico">📁</div>About</div>
+      <div class="desk-icon" data-scroll="#services"><div class="ico">🛠️</div>Services</div>
+      <div class="desk-icon" data-scroll="#projects"><div class="ico">📦</div>Projects</div>
+      <div class="desk-icon" data-scroll="#contact"><div class="ico">✉️</div>Contact</div>
+    </div>
+
+    <div class="float-wins" aria-hidden="true">
+      <div class="float-win fw1">
+        <div class="mini-title">bot.exe</div>
+        <div class="mini-body">Telegram · Mini App · Auto delivery</div>
+      </div>
+      <div class="float-win fw2">
+        <div class="mini-title">deploy.log</div>
+        <div class="mini-body">✓ build ok<br/>✓ pages live</div>
+      </div>
+      <div class="float-win fw3">
+        <div class="mini-title">ai.sys</div>
+        <div class="mini-body">Workflow · OCR · Chat</div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="win hero" id="home">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>aonagi_works.exe — Desktop</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h1 class="pixel">AONAGI WORKS</h1>
+        <p class="lead"><strong>Building Modern Websites, Telegram Bots, AI Automation, and Custom Digital Solutions.</strong></p>
+        <p class="desc">
+          We help individuals, creators, communities, and businesses build fast, scalable, and beautiful digital products—
+          from landing pages and dashboards to Telegram bots, automation systems, and AI-powered applications.
+        </p>
+        <div class="btns">
+          <a class="btn btn-primary" href="#contact">Get Started</a>
+          <a class="btn" href="#projects">View Portfolio</a>
+          <a class="btn btn-green" href="#contact">Contact Us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="win fade-in section-gap" id="about">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>about.exe</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h2 class="pixel">ABOUT</h2>
+        <p class="desc">
+          <strong>Aonagi Works</strong> is a freelance digital studio specializing in website development, Telegram bots,
+          automation systems, AI integration, dashboards, APIs, and custom software.
+        </p>
+        <p class="desc" style="margin-bottom:0">
+          Every project is built with clean code, responsive design, excellent performance, scalability, and long-term maintainability.
+        </p>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="win fade-in section-gap" id="services">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>services.exe</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h2 class="pixel">SERVICES</h2>
+        <div class="grid-2">
+          <article class="card">
+            <div class="icon-lg">🌐</div>
+            <h3>Website Development</h3>
+            <ul>
+              <li>Landing Page & Portfolio</li>
+              <li>Company Profile</li>
+              <li>Dashboard & Admin Panel</li>
+              <li>E-Commerce & SaaS</li>
+              <li>Custom Web App</li>
+            </ul>
+          </article>
+          <article class="card">
+            <div class="icon-lg">🤖</div>
+            <h3>Telegram Bot Development</h3>
+            <ul>
+              <li>Store & Payment Bot</li>
+              <li>Membership & Auto Post</li>
+              <li>Moderation & AI Chat</li>
+              <li>Crypto Alert Bot</li>
+              <li>Mini App & Community Bot</li>
+            </ul>
+          </article>
+          <article class="card">
+            <div class="icon-lg">⚡</div>
+            <h3>Automation</h3>
+            <ul>
+              <li>Discord / WhatsApp Integration</li>
+              <li>REST API & Database</li>
+              <li>Web Scraper & Cron Jobs</li>
+              <li>Notification Systems</li>
+              <li>Business Automation</li>
+            </ul>
+          </article>
+          <article class="card">
+            <div class="icon-lg">🧠</div>
+            <h3>AI Solutions</h3>
+            <ul>
+              <li>AI Assistant & Chatbot</li>
+              <li>OCR</li>
+              <li>Recommendation System</li>
+              <li>AI Workflow Automation</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY -->
+    <section class="win fade-in section-gap" id="why">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>why_us.sys</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h2 class="pixel">WHY CHOOSE US</h2>
+        <div class="why-list">
+          <div class="why-item"><span>✔</span> Fast Development</div>
+          <div class="why-item"><span>✔</span> Affordable Pricing</div>
+          <div class="why-item"><span>✔</span> Responsive Design</div>
+          <div class="why-item"><span>✔</span> Premium UI/UX</div>
+          <div class="why-item"><span>✔</span> Clean & Scalable Code</div>
+          <div class="why-item"><span>✔</span> API Integration</div>
+          <div class="why-item"><span>✔</span> Ongoing Support</div>
+          <div class="why-item"><span>✔</span> Custom Features</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="win fade-in section-gap" id="pricing">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>pricing.exe</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h2 class="pixel">PRICING</h2>
+        <div class="price-box">
+          <div class="from">STARTING FROM</div>
+          <div class="amount">Rp10.000</div>
+          <p style="font-size:.9rem;color:var(--muted)">Pricing depends on:</p>
+          <ul>
+            <li>Project complexity & features</li>
+            <li>UI/UX design depth</li>
+            <li>API & database integration</li>
+            <li>Automation & timeline</li>
+            <li>Hosting requirements</li>
+          </ul>
+          <a class="btn btn-primary" href="#contact">Request Quotation</a>
+          <p class="note">Every project is custom-built. Request a free consultation for an accurate quotation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="win fade-in section-gap" id="projects">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>completed.exe</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h2 class="pixel">PROJECTS</h2>
+        <div class="grid-3">
+          <article class="card">
+            <span class="badge ok">Completed</span>
+            <h3>Telegram Digital Store Bot</h3>
+            <ul>
+              <li>Auto Delivery</li>
+              <li>Payment Gateway</li>
+              <li>Admin Dashboard</li>
+              <li>Product Management</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="badge ok">Completed</span>
+            <h3>Telegram Mini App Game</h3>
+            <ul>
+              <li>Farming & Inventory</li>
+              <li>Shop & Daily Rewards</li>
+              <li>Leaderboard</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="badge ok">Completed</span>
+            <h3>Company Landing Page</h3>
+            <ul>
+              <li>Responsive</li>
+              <li>SEO Optimized</li>
+              <li>Fast Loading</li>
+              <li>Modern Design</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="badge ok">Completed</span>
+            <h3>Crypto Alert Telegram Bot</h3>
+            <ul>
+              <li>Real-time Alerts</li>
+              <li>TON Monitoring</li>
+              <li>Notification System</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="badge ok">Completed</span>
+            <h3>Inventory Management Dashboard</h3>
+            <ul>
+              <li>Authentication</li>
+              <li>CRUD & Analytics</li>
+              <li>Export Data</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="badge ok">Completed</span>
+            <h3>AI Customer Service Bot</h3>
+            <ul>
+              <li>GPT Integration</li>
+              <li>FAQ & Handover</li>
+              <li>Multi-language</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECH -->
+    <section class="win fade-in section-gap" id="stack">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>tech_stack.dll</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h2 class="pixel">TECH STACK</h2>
+        <div class="stack" id="stackList"></div>
+      </div>
+    </section>
+
+    <!-- WORKFLOW -->
+    <section class="win fade-in section-gap" id="workflow">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>workflow.bat</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h2 class="pixel">WORKFLOW</h2>
+        <div class="flow" id="flowList"></div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="win fade-in section-gap" id="testimonials">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>reviews.txt</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h2 class="pixel">TESTIMONIALS</h2>
+        <div class="grid-3">
+          <article class="card">
+            <div class="stars">★★★★★</div>
+            <p class="quote">“Aonagi Works delivered beyond expectations. Fast, professional, and easy to communicate with.”</p>
+          </article>
+          <article class="card">
+            <div class="stars">★★★★★</div>
+            <p class="quote">“Great quality and affordable pricing. Highly recommended.”</p>
+          </article>
+          <article class="card">
+            <div class="stars">★★★★★</div>
+            <p class="quote">“Telegram bot works perfectly and the website looks amazing.”</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="win fade-in section-gap" id="contact">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>contact.exe</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <h2 class="pixel">CONTACT</h2>
+        <p class="desc" style="text-align:center;margin-inline:auto">Ready to build? Reach us on your favorite channel.</p>
+        <div class="contact-row">
+          <a class="btn btn-green" href="https://wa.me/6281234567890" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn btn-primary" href="https://t.me/botunlverse" target="_blank" rel="noopener">Telegram</a>
+          <a class="btn" href="https://github.com/aonagiworks" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="mailto:hello@aonagi.works">Email</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="win footer-win fade-in section-gap">
+      <div class="win-title" data-drag>
+        <i class="dot"></i><span>footer.inf</span>
+        <div class="win-ctrls"><b>_</b><b>□</b><b class="x">×</b></div>
+      </div>
+      <div class="win-body">
+        <strong>© 2026 AONAGI WORKS</strong>
+        <p>Building Websites, Bots, AI Automation, and Digital Solutions.</p>
+        <p style="margin-top:.35rem">Channel: <a href="https://t.me/botunlverse" target="_blank" rel="noopener">@botunlverse</a></p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Start menu -->
+  <div id="startMenu" role="menu" aria-label="Start menu">
+    <div class="start-head">Aonagi Works</div>
+    <div class="start-list">
+      <a href="#home">🏠 Home</a>
+      <a href="#about">📁 About</a>
+      <a href="#services">🛠️ Services</a>
+      <a href="#pricing">💰 Pricing</a>
+      <a href="#projects">📦 Projects</a>
+      <a href="#contact">✉️ Contact</a>
+      <button type="button" id="menuTheme">🌓 Toggle Theme</button>
+    </div>
+  </div>
+
+  <nav class="taskbar" aria-label="Taskbar">
+    <button class="start-btn" id="startBtn" type="button" aria-haspopup="true" aria-expanded="false">
+      <span aria-hidden="true">🪟</span> Start
+    </button>
+    <div class="task-pills">
+      <a class="task-pill active" href="#home">aonagi_works.exe</a>
+      <a class="task-pill" href="#services">services.exe</a>
+      <a class="task-pill" href="#projects">completed.exe</a>
+      <a class="task-pill" href="#contact">contact.exe</a>
+    </div>
+    <div class="tray">
+      <button class="theme-toggle" id="themeBtn" type="button" title="Toggle theme" aria-label="Toggle dark mode">🌓</button>
+      <span id="clock" aria-live="polite"></span>
+    </div>
+  </nav>
+
+  <script>
+    (function () {
+      // Boot
+      const boot = document.getElementById("boot");
+      setTimeout(() => boot.classList.add("hide"), 2000);
+      setTimeout(() => boot.remove(), 2600);
+
+      // Theme
+      const root = document.documentElement;
+      const saved = localStorage.getItem("aonagi-theme");
+      if (saved) root.setAttribute("data-theme", saved);
+      function toggleTheme() {
+        const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        localStorage.setItem("aonagi-theme", next);
+      }
+      document.getElementById("themeBtn").addEventListener("click", toggleTheme);
+      document.getElementById("menuTheme").addEventListener("click", () => {
+        toggleTheme();
+        closeStart();
+      });
+
+      // Clock
+      const clock = document.getElementById("clock");
+      function tick() {
+        const d = new Date();
+        clock.textContent = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      }
+      tick();
+      setInterval(tick, 15000);
+
+      // Start menu
+      const startBtn = document.getElementById("startBtn");
+      const startMenu = document.getElementById("startMenu");
+      function closeStart() {
+        startMenu.classList.remove("open");
+        startBtn.setAttribute("aria-expanded", "false");
+      }
+      startBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = startMenu.classList.toggle("open");
+        startBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      document.addEventListener("click", (e) => {
+        if (!startMenu.contains(e.target) && e.target !== startBtn) closeStart();
+      });
+      startMenu.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeStart));
+
+      // Stack
+      const stack = [
+        "HTML5","CSS3","Tailwind CSS","JavaScript","TypeScript","React","Next.js",
+        "Node.js","Express.js","Python","MySQL","PostgreSQL","MongoDB","Redis",
+        "Docker","Git","GitHub","Telegram Bot API","Cloudflare","Vercel","Railway"
+      ];
+      document.getElementById("stackList").innerHTML = stack.map((s) => `<span>${s}</span>`).join("");
+
+      // Workflow
+      const steps = ["Consultation","Planning","UI/UX Design","Development","Testing","Revision","Deployment","Maintenance"];
+      document.getElementById("flowList").innerHTML = steps
+        .map((s, i) => `<div class="step">${s}</div>${i < steps.length - 1 ? '<span class="arrow">→</span>' : ""}`)
+        .join("");
+
+      // Fade-in
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) {
+            en.target.classList.add("visible");
+            io.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+      document.querySelectorAll(".fade-in").forEach((el) => io.observe(el));
+
+      // Desktop icon scroll
+      document.querySelectorAll("[data-scroll]").forEach((el) => {
+        el.addEventListener("click", () => {
+          const t = document.querySelector(el.getAttribute("data-scroll"));
+          if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      // Lightweight drag for windows (desktop only)
+      if (window.matchMedia("(min-width: 901px)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.querySelectorAll("[data-drag]").forEach((bar) => {
+          const win = bar.closest(".win");
+          if (!win || win.classList.contains("hero")) return;
+          let sx, sy, ox, oy, dragging = false;
+          bar.addEventListener("pointerdown", (e) => {
+            if (e.button !== 0) return;
+            dragging = true;
+            const r = win.getBoundingClientRect();
+            sx = e.clientX; sy = e.clientY;
+            ox = r.left + window.scrollX; oy = r.top + window.scrollY;
+            win.style.position = "relative";
+            win.style.zIndex = "20";
+            bar.setPointerCapture(e.pointerId);
+          });
+          bar.addEventListener("pointermove", (e) => {
+            if (!dragging) return;
+            const dx = e.clientX - sx;
+            const dy = e.clientY - sy;
+            win.style.transform = `translate(${dx}px, ${dy}px)`;
+          });
+          bar.addEventListener("pointerup", () => {
+            dragging = false;
+            win.style.transform = "";
+            win.style.zIndex = "";
+          });
+        });
+      }
+
+      // Active task pill on scroll
+      const sections = ["home","services","projects","contact"];
+      const pills = document.querySelectorAll(".task-pill");
+      window.addEventListener("scroll", () => {
+        let current = "home";
+        sections.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top < 160) current = id;
+        });
+        pills.forEach((p) => {
+          const href = p.getAttribute("href") || "";
+          p.classList.toggle("active", href === "#" + current);
+        });
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
