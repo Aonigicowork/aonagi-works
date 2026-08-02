@@ -5,9 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#3A6EA5" />
   <meta name="description" content="Aonagi Works — websites, Telegram bots, AI automation, and custom digital solutions." />
-  <meta property="og:title" content="Aonagi Works" />
-  <meta property="og:description" content="Building modern websites, Telegram bots, AI automation, and custom digital solutions." />
+  <link rel="canonical" href="https://aonagiworks.github.io/aonagi-works/" />
+  
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aonagiworks.github.io/aonagi-works/" />
+  <meta property="og:site_name" content="Aonagi Works" />
+  <meta property="og:title" content="Aonagi Works — Digital Studio" />
+  <meta property="og:description" content="Building modern websites, Telegram bots, AI automation, and custom digital solutions." />
+  <meta property="og:image" content="https://aonagiworks.github.io/aonagi-works/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://aonagiworks.github.io/aonagi-works/" />
+  <meta name="twitter:title" content="Aonagi Works — Digital Studio" />
+  <meta name="twitter:description" content="Building modern websites, Telegram bots, AI automation, and custom digital solutions." />
+  <meta name="twitter:image" content="https://aonagiworks.github.io/aonagi-works/og-image.png" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://aonagiworks.github.io/aonagi-works/#organization",
+        "name": "Aonagi Works",
+        "url": "https://aonagiworks.github.io/aonagi-works/",
+        "logo": "https://aonagiworks.github.io/aonagi-works/favicon.svg",
+        "sameAs": [
+          "https://t.me/botunlverse",
+          "https://github.com/aonagiworks"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://aonagiworks.github.io/aonagi-works/#website",
+        "url": "https://aonagiworks.github.io/aonagi-works/",
+        "name": "Aonagi Works",
+        "description": "Building modern websites, Telegram bots, AI automation, and custom digital solutions.",
+        "publisher": {
+          "@id": "https://aonagiworks.github.io/aonagi-works/#organization"
+        },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://aonagiworks.github.io/aonagi-works/#service",
+        "name": "Aonagi Works",
+        "url": "https://aonagiworks.github.io/aonagi-works/",
+        "image": "https://aonagiworks.github.io/aonagi-works/og-image.png",
+        "priceRange": "Rp10.000+",
+        "description": "Freelance digital studio specializing in website development, Telegram bots, automation systems, AI integration, dashboards, APIs, and custom software.",
+        "knowsAbout": [
+          "Website Development",
+          "Telegram Bot Development",
+          "Automation Systems",
+          "AI Solutions",
+          "API Integration"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "url": "https://t.me/botunlverse",
+          "email": "aonagiworks@gmail.com"
+        }
+      }
+    ]
+  }
+  </script>
+
   <title>Aonagi Works — Digital Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -52,6 +124,14 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+    *:focus-visible { outline: 3px solid #FFB000; outline-offset: 2px; }
+    .skip-link {
+      position: absolute; top: -100px; left: 10px; z-index: 10000;
+      padding: .5rem 1rem; background: var(--xp-blue-dark); color: #fff;
+      font-weight: 700; border-radius: 0 0 6px 6px; border: 2px solid #fff;
+      transition: top .2s ease;
+    }
+    .skip-link:focus { top: 0; }
     body {
       font-family: var(--font);
       color: var(--ink);
@@ -60,6 +140,7 @@
       overflow-x: hidden;
       line-height: 1.55;
       cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath fill='%23000' stroke='%23fff' stroke-width='1' d='M1 1 L1 14 L5 11 L8 16 L10 15 L7 10 L12 10 Z'/%3E%3C/svg%3E") 1 1, auto;
+      transition: background-color .3s ease, color .3s ease;
     }
     a { color: inherit; text-decoration: none; }
     button { font: inherit; cursor: pointer; border: 0; background: none; }
@@ -71,6 +152,7 @@
         radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,.25), transparent 60%),
         linear-gradient(180deg, var(--sky) 0%, var(--sky-deep) 55%, var(--grass) 55%, var(--grass-dark) 100%);
       position: relative;
+      transition: background .3s ease;
     }
     [data-theme="dark"] .desktop {
       background:
@@ -129,7 +211,11 @@
     }
     .start-btn:hover { filter: brightness(1.08); }
     .start-btn:active { transform: translateY(1px); }
-    .task-pills { display: flex; gap: .3rem; flex: 1; overflow-x: auto; }
+    .task-pills {
+      display: flex; gap: .3rem; flex: 1; overflow-x: auto;
+      scrollbar-width: none; -ms-overflow-style: none;
+    }
+    .task-pills::-webkit-scrollbar { display: none; }
     .task-pill {
       color: #fff; font-size: .72rem; white-space: nowrap;
       padding: .3rem .65rem; border-radius: 3px;
@@ -172,7 +258,9 @@
       margin: 0 auto 1.25rem;
       max-width: var(--max);
       overflow: hidden;
+      scroll-margin-top: 1rem;
       animation: winIn .45s cubic-bezier(.2,.8,.2,1) both;
+      transition: background-color .3s ease, border-color .3s ease;
     }
     @keyframes winIn {
       from { opacity: 0; transform: translateY(18px) scale(.97); }
@@ -203,6 +291,7 @@
       background: var(--window-face);
       padding: 1.1rem 1.15rem 1.25rem;
       border-top: 1px solid rgba(255,255,255,.5);
+      transition: background-color .3s ease;
     }
     .win.hero { margin-top: .5rem; }
     .pixel {
@@ -226,7 +315,7 @@
       border: 2px solid #003c74; border-radius: 4px;
       background: linear-gradient(180deg, #fff 0%, #ece9d8 48%, #d6d2c2 100%);
       color: #000; box-shadow: 1px 1px 0 #fff inset, -1px -1px 0 rgba(0,0,0,.15) inset;
-      transition: transform .15s ease, filter .15s ease;
+      transition: transform .15s ease, filter .15s ease, background .3s ease, color .3s ease;
     }
     .btn:hover { filter: brightness(1.04); transform: translateY(-1px); }
     .btn:active { transform: translateY(1px); }
@@ -238,6 +327,19 @@
     .btn-green {
       background: linear-gradient(180deg, #6ecf6e, #3C8D40);
       color: #fff; border-color: #2F6B32;
+    }
+    [data-theme="dark"] .btn {
+      background: linear-gradient(180deg, #3A3F4D 0%, #2A2D35 100%);
+      color: #F2F4F8; border-color: #5B9BD5;
+      box-shadow: 1px 1px 0 rgba(255,255,255,.1) inset, -1px -1px 0 rgba(0,0,0,.3) inset;
+    }
+    [data-theme="dark"] .btn-primary {
+      background: linear-gradient(180deg, #245B93, #163C65);
+      color: #fff; border-color: #5B9BD5;
+    }
+    [data-theme="dark"] .btn-green {
+      background: linear-gradient(180deg, #3C8D40, #1F4D22);
+      color: #fff; border-color: #5CB85C;
     }
     /* Floating mini windows */
     .float-wins {
@@ -281,7 +383,7 @@
       border-radius: 6px;
       padding: .9rem;
       box-shadow: 2px 2px 0 rgba(0,0,0,.08);
-      transition: transform .2s ease, box-shadow .2s ease;
+      transition: transform .2s ease, box-shadow .2s ease, background-color .3s ease;
       overflow-wrap: anywhere; word-break: break-word;
     }
     [data-theme="dark"] .card { border-color: #3d5a80; background: #1a1e28; }
@@ -304,6 +406,8 @@
     [data-theme="dark"] .badge { background: #1e3a5f; color: #cde4ff; border-color: #3d5a80; }
     .badge.ok { background: #E6F7E8; color: #1F6B2C; border-color: #7BC47F; }
     [data-theme="dark"] .badge.ok { background: #1a3a22; color: #9fe0a8; }
+    .badge.wip { background: #FFF3CD; color: #856404; border-color: #FFEEBA; }
+    [data-theme="dark"] .badge.wip { background: #3a3215; color: #ffe896; border-color: #63541c; }
     /* Why list */
     .why-list {
       display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem;
@@ -312,6 +416,7 @@
       display: flex; align-items: flex-start; gap: .5rem;
       background: var(--white); border: 2px solid #B8C8E8; border-radius: 6px;
       padding: .7rem .8rem; font-size: .9rem; font-weight: 600;
+      transition: background-color .3s ease;
     }
     [data-theme="dark"] .why-item { border-color: #3d5a80; background: #1a1e28; }
     .why-item span { color: var(--xp-green); font-weight: 800; }
@@ -320,6 +425,7 @@
       text-align: center; max-width: 420px; margin: 0 auto;
       background: var(--white); border: 3px solid var(--border); border-radius: 8px;
       padding: 1.4rem 1.2rem; box-shadow: 4px 4px 0 rgba(10,36,106,.15);
+      transition: background-color .3s ease;
     }
     [data-theme="dark"] .price-box { background: #1a1e28; }
     .price-box .from { font-size: .75rem; font-weight: 700; letter-spacing: .08em; color: var(--muted); }
@@ -328,7 +434,7 @@
       margin: .7rem 0; color: var(--xp-blue-dark);
     }
     [data-theme="dark"] .price-box .amount { color: #9ec5ea; }
-    .price-box ul { text-align: left; margin: .8rem auto 1rem; max-width: 280px; color: var(--muted); font-size: .9rem; }
+    .price-box ul { text-align: left; margin: .8rem auto 1rem; max-width: 280px; color: var(--muted); font-size: .9rem; list-style: disc; padding-left: 1.2rem; }
     .note { font-size: .82rem; color: var(--muted); margin-top: .85rem; }
     /* Stack pills */
     .stack {
@@ -352,9 +458,11 @@
     .flow .step {
       background: var(--white); border: 2px solid #7A96DF; border-radius: 6px;
       padding: .45rem .7rem; font-size: .8rem; font-weight: 700;
+      transition: background-color .3s ease;
     }
     [data-theme="dark"] .flow .step { background: #1a1e28; border-color: #3d5a80; }
     .flow .arrow { color: var(--xp-blue); font-weight: 800; }
+    [data-theme="dark"] .flow .arrow { color: #5B9BD5; }
     /* Testimonials */
     .quote {
       font-size: .92rem; color: var(--muted); margin: .4rem 0 .5rem;
@@ -501,6 +609,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#home">Skip to content</a>
   <div id="boot" aria-hidden="true">
     <div>
       <div class="pixel" style="font-size:12px;margin-bottom:12px">AONAGI WORKS</div>
@@ -753,7 +862,7 @@
             </ul>
           </article>
           <article class="card">
-            <span class="badge ok">WIP</span>
+            <span class="badge wip">WIP</span>
             <h3>Zuzu Dating (@zuzudatingbot)</h3>
             <ul>
               <li>Matchmaking</li>
@@ -824,9 +933,9 @@
         <h2 class="pixel">CONTACT</h2>
         <p class="desc" style="text-align:center;margin-inline:auto">Ready to build? Reach us on your favorite channel.</p>
         <div class="contact-row">
-          <a class="btn btn-primary" href="https://t.me/botunlverse" target="_blank" rel="noopener">Telegram</a>
-          <a class="btn" href="https://github.com/aonagiworks" target="_blank" rel="noopener">GitHub</a>
-          <a class="btn" href="mailto:aonagiworks@gmail.com">Email</a>
+          <a class="btn btn-primary" href="https://t.me/botunlverse" target="_blank" rel="noopener">✈️ Telegram</a>
+          <a class="btn" href="https://github.com/aonagiworks" target="_blank" rel="noopener">💻 GitHub</a>
+          <a class="btn" href="mailto:aonagiworks@gmail.com">✉️ Email</a>
         </div>
       </div>
     </section>
@@ -849,13 +958,13 @@
   <div id="startMenu" role="menu" aria-label="Start menu">
     <div class="start-head">Aonagi Works</div>
     <div class="start-list">
-      <a href="#home">🏠 Home</a>
-      <a href="#about">📁 About</a>
-      <a href="#services">🛠️ Services</a>
-      <a href="#pricing">💰 Pricing</a>
-      <a href="#projects">📦 Projects</a>
-      <a href="#contact">✉️ Contact</a>
-      <button type="button" id="menuTheme">🌓 Toggle Theme</button>
+      <a href="#home" role="menuitem">🏠 Home</a>
+      <a href="#about" role="menuitem">📁 About</a>
+      <a href="#services" role="menuitem">🛠️ Services</a>
+      <a href="#pricing" role="menuitem">💰 Pricing</a>
+      <a href="#projects" role="menuitem">📦 Projects</a>
+      <a href="#contact" role="menuitem">✉️ Contact</a>
+      <button type="button" id="menuTheme" role="menuitem">🌓 Toggle Theme</button>
     </div>
   </div>
 
@@ -884,12 +993,17 @@
 
       // Theme
       const root = document.documentElement;
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
       const saved = localStorage.getItem("aonagi-theme");
-      if (saved) root.setAttribute("data-theme", saved);
+      if (saved) {
+        root.setAttribute("data-theme", saved);
+        if (themeColorMeta) themeColorMeta.setAttribute("content", saved === "dark" ? "#1B2A4A" : "#3A6EA5");
+      }
       function toggleTheme() {
         const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
         root.setAttribute("data-theme", next);
         localStorage.setItem("aonagi-theme", next);
+        if (themeColorMeta) themeColorMeta.setAttribute("content", next === "dark" ? "#1B2A4A" : "#3A6EA5");
       }
       document.getElementById("themeBtn").addEventListener("click", toggleTheme);
       document.getElementById("menuTheme").addEventListener("click", () => {
@@ -920,6 +1034,12 @@
       });
       document.addEventListener("click", (e) => {
         if (!startMenu.contains(e.target) && e.target !== startBtn) closeStart();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && startMenu.classList.contains("open")) {
+          closeStart();
+          startBtn.focus();
+        }
       });
       startMenu.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeStart));
 

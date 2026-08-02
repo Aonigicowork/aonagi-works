@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="xpTitle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A246A"/>
+      <stop offset="45%" stop-color="#3A6EA5"/>
+      <stop offset="100%" stop-color="#1665C0"/>
+    </linearGradient>
+    <linearGradient id="xpWin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ECE9D8"/>
+      <stop offset="100%" stop-color="#D6D2C2"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="8" fill="url(#xpWin)" stroke="#0054E3" stroke-width="3"/>
+  <path d="M 4,10 Q 4,5 9,5 L 55,5 Q 60,5 60,10 L 60,18 L 4,18 Z" fill="url(#xpTitle)"/>
+  <circle cx="10" cy="11.5" r="2.5" fill="#5B9BD5"/>
+  <circle cx="17" cy="11.5" r="2.5" fill="#5B9BD5"/>
+  <circle cx="53" cy="11.5" r="2.5" fill="#E0432F"/>
+  <text x="32" y="48" font-family="'Press Start 2P', monospace, sans-serif" font-weight="900" font-size="20" fill="#0A246A" text-anchor="middle">AW</text>
+</svg>
