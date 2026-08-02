@@ -123,7 +123,11 @@
       --taskbar: linear-gradient(180deg, #1E3A5F, #12253D);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      width: 100%;
+    }
     *:focus-visible { outline: 3px solid #FFB000; outline-offset: 2px; }
     .skip-link {
       position: absolute; top: -100px; left: 10px; z-index: 10000;
@@ -137,6 +141,7 @@
       color: var(--ink);
       background: var(--sky);
       min-height: 100vh;
+      width: 100%;
       overflow-x: hidden;
       line-height: 1.55;
       cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath fill='%23000' stroke='%23fff' stroke-width='1' d='M1 1 L1 14 L5 11 L8 16 L10 15 L7 10 L12 10 Z'/%3E%3C/svg%3E") 1 1, auto;
@@ -147,11 +152,13 @@
     img { max-width: 100%; display: block; }
     .desktop {
       min-height: 100vh;
+      width: 100%;
       padding: 1rem 1rem 5.5rem;
       background:
         radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,.25), transparent 60%),
         linear-gradient(180deg, var(--sky) 0%, var(--sky-deep) 55%, var(--grass) 55%, var(--grass-dark) 100%);
       position: relative;
+      overflow-x: hidden;
       transition: background .3s ease;
     }
     [data-theme="dark"] .desktop {
@@ -164,6 +171,7 @@
       position: absolute; background: rgba(255,255,255,.85); border-radius: 50px;
       filter: drop-shadow(2px 2px 0 rgba(0,0,0,.08)); pointer-events: none; z-index: 0;
       animation: drift linear infinite;
+      will-change: transform;
     }
     [data-theme="dark"] .cloud { background: rgba(120,140,180,.25); }
     .cloud::before, .cloud::after {
@@ -175,8 +183,8 @@
     .c2 { width: 90px; height: 30px; top: 18%; left: 30%; animation-duration: 62s; animation-delay: -12s; }
     .c3 { width: 140px; height: 42px; top: 12%; left: 70%; animation-duration: 55s; animation-delay: -25s; }
     @keyframes drift {
-      from { transform: translateX(0); }
-      to { transform: translateX(120vw); }
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(100vw, 0, 0); }
     }
     /* Boot screen */
     #boot {
@@ -208,6 +216,7 @@
       color: #fff; font-weight: 700; font-size: .85rem;
       padding: .35rem .75rem .35rem .5rem; border-radius: 0 12px 12px 0;
       border: 1px solid #2F6B32; box-shadow: 1px 1px 0 rgba(255,255,255,.25) inset;
+      transition: filter .15s ease;
     }
     .start-btn:hover { filter: brightness(1.08); }
     .start-btn:active { transform: translateY(1px); }
@@ -221,6 +230,7 @@
       padding: .3rem .65rem; border-radius: 3px;
       background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.12));
       border: 1px solid rgba(255,255,255,.2); opacity: .9;
+      transition: background .2s ease, opacity .2s ease;
     }
     .task-pill:hover, .task-pill.active { opacity: 1; background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(0,0,0,.08)); }
     .tray {
@@ -230,24 +240,32 @@
     .theme-toggle {
       width: 28px; height: 22px; border-radius: 3px; color: #fff;
       background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
-      font-size: .8rem;
+      font-size: .8rem; transition: background .15s ease;
     }
+    .theme-toggle:hover { background: rgba(255,255,255,.25); }
     /* Desktop icons */
     .desk-icons {
       position: absolute; top: 1rem; left: 1rem; z-index: 2;
       display: flex; flex-direction: column; gap: .85rem;
     }
     .desk-icon {
+      position: relative;
       width: 72px; text-align: center; color: #fff; font-size: .68rem;
       text-shadow: 1px 1px 0 #000; cursor: pointer; user-select: none;
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+    .desk-icon::before {
+      content: ""; position: absolute; inset: -4px; z-index: -1; background: transparent;
     }
     .desk-icon .ico {
       width: 40px; height: 40px; margin: 0 auto .25rem;
       display: grid; place-items: center; font-size: 1.4rem;
       background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.35);
       border-radius: 4px; box-shadow: var(--shadow);
+      transition: background-color .2s ease, border-color .2s ease;
     }
-    .desk-icon:hover .ico { background: rgba(58,110,165,.55); }
+    .desk-icon:hover .ico { background: rgba(58,110,165,.55); border-color: rgba(255,255,255,.6); }
     /* Window chrome */
     .win {
       position: relative; z-index: 5;
@@ -259,12 +277,24 @@
       max-width: var(--max);
       overflow: hidden;
       scroll-margin-top: 1rem;
-      animation: winIn .45s cubic-bezier(.2,.8,.2,1) both;
-      transition: background-color .3s ease, border-color .3s ease;
+      transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease;
+      will-change: transform;
+      backface-visibility: hidden;
     }
-    @keyframes winIn {
-      from { opacity: 0; transform: translateY(18px) scale(.97); }
-      to { opacity: 1; transform: none; }
+    .win.is-dragging {
+      transition: none !important;
+      user-select: none;
+      box-shadow: 0 20px 50px rgba(0,0,0,.35);
+      z-index: 50 !important;
+    }
+    .win.collapsed .win-body {
+      display: none;
+    }
+    .win.maximized {
+      max-width: 100% !important;
+    }
+    .win.closed {
+      display: none !important;
     }
     .win-title {
       display: flex; align-items: center; gap: .5rem;
@@ -272,6 +302,7 @@
       background: var(--xp-title); color: #fff;
       font-size: .78rem; font-weight: 600;
       user-select: none; cursor: grab;
+      touch-action: none;
     }
     .win-title:active { cursor: grabbing; }
     .win-title .dot {
@@ -285,7 +316,11 @@
       font-size: 9px; font-weight: 700; color: #000;
       background: linear-gradient(180deg, #fff, #d4d0c8);
       border: 1px solid #003c74; border-radius: 2px; line-height: 1;
+      cursor: pointer; user-select: none;
+      transition: filter .1s ease;
     }
+    .win-ctrls b:hover { filter: brightness(1.15); }
+    .win-ctrls b:active { transform: translateY(1px); }
     .win-ctrls b.x { background: linear-gradient(180deg, #ff9a8b, #e0432f); color: #fff; }
     .win-body {
       background: var(--window-face);
@@ -310,14 +345,20 @@
     .desc { color: var(--muted); max-width: 48rem; margin-bottom: 1.1rem; }
     .btns { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .4rem; }
     .btn {
+      position: relative;
       display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
       padding: .55rem 1rem; font-weight: 600; font-size: .9rem;
       border: 2px solid #003c74; border-radius: 4px;
       background: linear-gradient(180deg, #fff 0%, #ece9d8 48%, #d6d2c2 100%);
       color: #000; box-shadow: 1px 1px 0 #fff inset, -1px -1px 0 rgba(0,0,0,.15) inset;
-      transition: transform .15s ease, filter .15s ease, background .3s ease, color .3s ease;
+      transition: filter .15s ease, background .3s ease, color .3s ease, border-color .3s ease;
+      will-change: transform;
+      backface-visibility: hidden;
     }
-    .btn:hover { filter: brightness(1.04); transform: translateY(-1px); }
+    .btn::before {
+      content: ""; position: absolute; inset: -4px; z-index: -1; background: transparent;
+    }
+    .btn:hover { filter: brightness(1.04); }
     .btn:active { transform: translateY(1px); }
     .btn-primary {
       background: linear-gradient(180deg, #5B9BD5, #245B93);
@@ -350,6 +391,7 @@
       background: var(--window-face); border: 2px solid var(--border);
       border-radius: 6px; box-shadow: var(--shadow); opacity: .9;
       animation: floatY 7s ease-in-out infinite;
+      will-change: transform;
     }
     .float-win .mini-title {
       background: var(--xp-title); color: #fff; font-size: .55rem;
@@ -360,8 +402,8 @@
     .fw2 { top: 38%; right: 8%; animation-delay: -2s; width: min(150px, 24vw); }
     .fw3 { bottom: 22%; left: 6%; animation-delay: -4s; }
     @keyframes floatY {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -10px, 0); }
     }
     /* Cards / grids */
     .grid-3 {
@@ -377,19 +419,25 @@
       gap: .75rem;
     }
     .card {
+      position: relative;
       min-width: 0; max-width: 100%;
       background: var(--white);
       border: 2px solid #7A96DF;
       border-radius: 6px;
       padding: .9rem;
       box-shadow: 2px 2px 0 rgba(0,0,0,.08);
-      transition: transform .2s ease, box-shadow .2s ease, background-color .3s ease;
+      transition: box-shadow .2s ease, background-color .3s ease, border-color .3s ease;
       overflow-wrap: anywhere; word-break: break-word;
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+    .card::before {
+      content: ""; position: absolute; inset: -4px; z-index: -1; background: transparent;
     }
     [data-theme="dark"] .card { border-color: #3d5a80; background: #1a1e28; }
     .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 3px 6px 0 rgba(0,0,0,.12);
+      box-shadow: 3px 6px 0 rgba(0,0,0,.15);
+      border-color: var(--xp-blue-light);
     }
     .card h3 {
       font-size: .98rem; margin: .35rem 0 .4rem; color: var(--ink);
@@ -416,7 +464,7 @@
       display: flex; align-items: flex-start; gap: .5rem;
       background: var(--white); border: 2px solid #B8C8E8; border-radius: 6px;
       padding: .7rem .8rem; font-size: .9rem; font-weight: 600;
-      transition: background-color .3s ease;
+      transition: background-color .3s ease, border-color .3s ease;
     }
     [data-theme="dark"] .why-item { border-color: #3d5a80; background: #1a1e28; }
     .why-item span { color: var(--xp-green); font-weight: 800; }
@@ -441,16 +489,22 @@
       display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center;
     }
     .stack span {
+      position: relative;
       font-size: .78rem; font-weight: 600; padding: .4rem .65rem;
       border: 2px solid #7A96DF; border-radius: 999px;
       background: linear-gradient(180deg, #fff, #e8f0ff);
       color: #0A246A;
-      transition: transform .15s ease;
+      transition: background .2s ease, border-color .2s ease;
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+    .stack span::before {
+      content: ""; position: absolute; inset: -4px; z-index: -1; background: transparent;
     }
     [data-theme="dark"] .stack span {
       background: linear-gradient(180deg, #243044, #1a1e28); color: #cde4ff; border-color: #3d5a80;
     }
-    .stack span:hover { transform: translateY(-2px) scale(1.04); }
+    .stack span:hover { border-color: var(--xp-blue-light); }
     /* Workflow */
     .flow {
       display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .4rem;
@@ -475,8 +529,8 @@
     .footer-win strong { color: var(--ink); }
     /* Section spacing */
     .section-gap { margin-top: 1.1rem; }
-    .fade-in { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
-    .fade-in.visible { opacity: 1; transform: none; }
+    .fade-in { opacity: 0; transform: translate3d(0, 14px, 0); transition: opacity .5s ease, transform .5s ease; }
+    .fade-in.visible { opacity: 1; transform: translate3d(0, 0, 0); }
     /* Start menu */
     #startMenu {
       display: none; position: fixed; left: 4px; bottom: 46px; z-index: 120;
@@ -485,7 +539,11 @@
       border-radius: 0 8px 0 0; box-shadow: var(--shadow);
       overflow: hidden;
     }
-    #startMenu.open { display: block; animation: winIn .25s ease; }
+    #startMenu.open { display: block; animation: menuIn .2s ease; }
+    @keyframes menuIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     .start-head {
       background: var(--xp-title); color: #fff; padding: .65rem .8rem;
       font-weight: 700; font-size: .9rem;
@@ -493,6 +551,7 @@
     .start-list button, .start-list a {
       display: flex; width: 100%; align-items: center; gap: .55rem;
       padding: .55rem .8rem; font-size: .88rem; color: var(--ink); text-align: left;
+      transition: background-color .15s ease, color .15s ease;
     }
     .start-list button:hover, .start-list a:hover { background: #316AC5; color: #fff; }
     /* ─── Responsive Full Ladder ────────────────────────────────────────── */
@@ -1068,41 +1127,109 @@
       }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
       document.querySelectorAll(".fade-in").forEach((el) => io.observe(el));
 
-      // Desktop icon scroll
+      // Window Chrome controls (_ , □ , ×)
+      document.querySelectorAll(".win-ctrls").forEach((ctrls) => {
+        const win = ctrls.closest(".win");
+        if (!win) return;
+        const btns = ctrls.querySelectorAll("b");
+        if (btns[0]) {
+          btns[0].title = "Minimize";
+          btns[0].addEventListener("click", (e) => {
+            e.stopPropagation();
+            win.classList.toggle("collapsed");
+          });
+        }
+        if (btns[1]) {
+          btns[1].title = "Maximize";
+          btns[1].addEventListener("click", (e) => {
+            e.stopPropagation();
+            win.classList.toggle("maximized");
+          });
+        }
+        if (btns[2]) {
+          btns[2].title = "Close";
+          btns[2].addEventListener("click", (e) => {
+            e.stopPropagation();
+            win.classList.add("closed");
+          });
+        }
+      });
+
+      // Desktop icon click to scroll and restore window
       document.querySelectorAll("[data-scroll]").forEach((el) => {
         el.addEventListener("click", () => {
-          const t = document.querySelector(el.getAttribute("data-scroll"));
-          if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+          const targetId = el.getAttribute("data-scroll");
+          const t = document.querySelector(targetId);
+          if (t) {
+            t.classList.remove("closed");
+            t.classList.remove("collapsed");
+            t.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
         });
       });
 
-      // Lightweight drag for windows (desktop only)
+      // Smooth window drag (desktop only)
       if (window.matchMedia("(min-width: 901px)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         document.querySelectorAll("[data-drag]").forEach((bar) => {
           const win = bar.closest(".win");
           if (!win || win.classList.contains("hero")) return;
-          let sx, sy, ox, oy, dragging = false;
+
+          let startX = 0, startY = 0;
+          let initialTranslateX = 0, initialTranslateY = 0;
+          let currentTranslateX = 0, currentTranslateY = 0;
+          let dragging = false;
+          let rafId = null;
+
+          function updatePosition() {
+            if (!dragging) return;
+            win.style.transform = `translate3d(${currentTranslateX}px, ${currentTranslateY}px, 0)`;
+            rafId = null;
+          }
+
           bar.addEventListener("pointerdown", (e) => {
-            if (e.button !== 0) return;
+            if (e.button !== 0 || e.target.closest(".win-ctrls")) return;
             dragging = true;
-            const r = win.getBoundingClientRect();
-            sx = e.clientX; sy = e.clientY;
-            ox = r.left + window.scrollX; oy = r.top + window.scrollY;
-            win.style.position = "relative";
-            win.style.zIndex = "20";
+            win.classList.add("is-dragging");
+
+            startX = e.clientX;
+            startY = e.clientY;
+
+            // Extract existing transform offset
+            const style = window.getComputedStyle(win);
+            const matrix = new WebKitCSSMatrix(style.transform);
+            initialTranslateX = matrix.m41;
+            initialTranslateY = matrix.m42;
+
             bar.setPointerCapture(e.pointerId);
           });
+
           bar.addEventListener("pointermove", (e) => {
             if (!dragging) return;
-            const dx = e.clientX - sx;
-            const dy = e.clientY - sy;
-            win.style.transform = `translate(${dx}px, ${dy}px)`;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            currentTranslateX = initialTranslateX + dx;
+            currentTranslateY = initialTranslateY + dy;
+
+            if (!rafId) {
+              rafId = requestAnimationFrame(updatePosition);
+            }
           });
-          bar.addEventListener("pointerup", () => {
+
+          function stopDrag(e) {
+            if (!dragging) return;
             dragging = false;
-            win.style.transform = "";
-            win.style.zIndex = "";
-          });
+            win.classList.remove("is-dragging");
+            if (rafId) {
+              cancelAnimationFrame(rafId);
+              rafId = null;
+            }
+            if (e && bar.hasPointerCapture(e.pointerId)) {
+              bar.releasePointerCapture(e.pointerId);
+            }
+          }
+
+          bar.addEventListener("pointerup", stopDrag);
+          bar.addEventListener("pointercancel", stopDrag);
         });
       }
 
