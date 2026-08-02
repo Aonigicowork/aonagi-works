@@ -169,7 +169,7 @@
     /* Clouds */
     .cloud {
       position: absolute; background: rgba(255,255,255,.85); border-radius: 50px;
-      filter: drop-shadow(2px 2px 0 rgba(0,0,0,.08)); pointer-events: none; z-index: 0;
+      pointer-events: none; z-index: 0;
       animation: drift linear infinite;
       will-change: transform;
     }
@@ -286,6 +286,10 @@
       user-select: none;
       box-shadow: 0 20px 50px rgba(0,0,0,.35);
       z-index: 50 !important;
+      cursor: grabbing !important;
+    }
+    .win.is-dragging .win-title {
+      cursor: grabbing !important;
     }
     .win.collapsed .win-body {
       display: none;
@@ -1163,7 +1167,7 @@
           if (t) {
             t.classList.remove("closed");
             t.classList.remove("collapsed");
-            t.scrollIntoView({ behavior: "smooth", block: "start" });
+            t.scrollIntoView({ block: "start" });
           }
         });
       });
@@ -1175,14 +1179,16 @@
           if (!win || win.classList.contains("hero")) return;
 
           let startX = 0, startY = 0;
-          let initialTranslateX = 0, initialTranslateY = 0;
-          let currentTranslateX = 0, currentTranslateY = 0;
+          let initialX = 0, initialY = 0;
+          let currentX = 0, currentY = 0;
           let dragging = false;
           let rafId = null;
 
           function updatePosition() {
             if (!dragging) return;
-            win.style.transform = `translate3d(${currentTranslateX}px, ${currentTranslateY}px, 0)`;
+            win.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+            win.setAttribute("data-x", currentX);
+            win.setAttribute("data-y", currentY);
             rafId = null;
           }
 
@@ -1194,11 +1200,8 @@
             startX = e.clientX;
             startY = e.clientY;
 
-            // Extract existing transform offset
-            const style = window.getComputedStyle(win);
-            const matrix = new WebKitCSSMatrix(style.transform);
-            initialTranslateX = matrix.m41;
-            initialTranslateY = matrix.m42;
+            initialX = parseFloat(win.getAttribute("data-x")) || 0;
+            initialY = parseFloat(win.getAttribute("data-y")) || 0;
 
             bar.setPointerCapture(e.pointerId);
           });
@@ -1207,8 +1210,8 @@
             if (!dragging) return;
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
-            currentTranslateX = initialTranslateX + dx;
-            currentTranslateY = initialTranslateY + dy;
+            currentX = initialX + dx;
+            currentY = initialY + dy;
 
             if (!rafId) {
               rafId = requestAnimationFrame(updatePosition);
