@@ -1186,7 +1186,9 @@
 
           function updatePosition() {
             if (!dragging) return;
-            win.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+            const rx = Math.round(currentX);
+            const ry = Math.round(currentY);
+            win.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
             win.setAttribute("data-x", currentX);
             win.setAttribute("data-y", currentY);
             rafId = null;
@@ -1239,16 +1241,23 @@
       // Active task pill on scroll
       const sections = ["home","services","projects","contact"];
       const pills = document.querySelectorAll(".task-pill");
+      let scrollTicking = false;
       window.addEventListener("scroll", () => {
-        let current = "home";
-        sections.forEach((id) => {
-          const el = document.getElementById(id);
-          if (el && el.getBoundingClientRect().top < 160) current = id;
-        });
-        pills.forEach((p) => {
-          const href = p.getAttribute("href") || "";
-          p.classList.toggle("active", href === "#" + current);
-        });
+        if (!scrollTicking) {
+          window.requestAnimationFrame(() => {
+            let current = "home";
+            sections.forEach((id) => {
+              const el = document.getElementById(id);
+              if (el && el.getBoundingClientRect().top < 160) current = id;
+            });
+            pills.forEach((p) => {
+              const href = p.getAttribute("href") || "";
+              p.classList.toggle("active", href === "#" + current);
+            });
+            scrollTicking = false;
+          });
+          scrollTicking = true;
+        }
       }, { passive: true });
     })();
   </script>
